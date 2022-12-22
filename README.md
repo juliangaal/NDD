@@ -1,3 +1,34 @@
+## This Fork
+
+This fork includes
+
+* a build system for the c++ code (cmake)
+* an example that reads poses from a textfile, and pointcloud of your choosing, and visualizes the results
+
+  ![](./data/demo.png)
+
+### Build 
+
+* Dependencies
+  * Eigen3
+  * PCL
+* cmake
+  ```bash
+  git clone <this repo> && cd <this repo>
+  mkdir build && cd build
+  make
+  ```
+
+### Usage
+
+```bash
+usage: ./ndd_demo <poses.txt> <pcl_dir>
+       Poses are expected to contain at least x, y, z coordinates in a txt or csv file
+       Keyframes are expected to be .pcd files
+```
+
+----------------------------------------------------------------------------------
+
 ## NDD
 
 The code for our paper accepted by  **IROS 2022** (NDD: A 3D Point Cloud Descriptor Based on Normal Distribution for Loop Closure Detection)
@@ -23,12 +54,4 @@ To run the demo, simply run NDD_demo.m.
 
 Demo video can be found at: https://youtu.be/OYfp4tURhr0
 
-### This Fork
-
-This fork includes 
-
-* a build system for the c++ code (cmake)
-* an example that reads poses from a textfile, and pointcloud of your choosing, and visualizes the results
-
-  ![](./data/demo.png)
 
