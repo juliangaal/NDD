@@ -37,6 +37,11 @@ inline std::istream &operator>>(std::istream &is, WordDelimitedBy<delimiter> &ou
 inline void
 read_txt(const std::filesystem::path &poses_txt, pcl::PointCloud<pcl::PointXYZ> &points, char delimeter = ',')
 {
+    if (!std::filesystem::exists(poses_txt))
+    {
+        throw std::runtime_error("text file of poses does not exist");
+    }
+    
     points.reserve(500);
     std::string line;
     std::ifstream myfile(poses_txt);
@@ -60,6 +65,11 @@ read_txt(const std::filesystem::path &poses_txt, pcl::PointCloud<pcl::PointXYZ> 
 inline void index_keyframes(const std::filesystem::path &keyframe_dir, std::vector<std::filesystem::path> &keyframe_paths, std::string extension = ".pcd")
 {
     std::set<std::filesystem::path> sorted_by_name;
+    
+    if (!std::filesystem::exists(keyframe_dir))
+    {
+        throw std::runtime_error("keyframe directory does not exist!");
+    }
     
     for (const auto &entry : std::filesystem::directory_iterator(keyframe_dir))
     {

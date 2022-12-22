@@ -22,17 +22,32 @@ namespace fs = std::filesystem;
 
 void print_usage()
 {
-    std::cout << "usage: ./ndd_demo <poses.txt> <pcl_dir>\n";
+    std::cout << "usage: ./ndd_demo <poses.txt> <pcl_dir>\n"
+              << "       Poses are expected to contain at least x, y, z coordinates in a txt or csv file\n"
+              << "       Keyframes are expected to be .pcd files\n";
 }
 
-int main()
+int main(int argc, char** argv)
 {
-    ndd::NDDManager ndd;
+    if (argc < 3)
+    {
+        print_usage();
+        return 0;
+    }
     
+    auto poses_txt = fs::path(argv[1]);
+    auto keyframe_dir = fs::path(argv[2]);
+    
+    ndd::NDDManager ndd;
     pcl::PointCloud<pcl::PointXYZ> path;
     std::vector<fs::path> keyframe_paths;
-    demo::read_txt(fs::path("/home/julian/dev/loop_closure/vorplatz.txt"), path);
-    demo::index_keyframes(fs::path("/home/julian/dev/loop_closure/vorplatz"), keyframe_paths);
+    demo::read_txt(poses_txt, path);
+    demo::index_keyframes(keyframe_dir, keyframe_paths);
+    
+    if (path.size() != keyframe_paths.size())
+    {
+        throw std::runtime_error("number of keyframes and poses to now match!");
+    }
     
     pcl::Correspondences correspondences;
     correspondences.reserve(path.size() / 5);
@@ -51,7 +66,6 @@ int main()
         if (loop_id != -1)
         {
             correspondences.emplace_back(demo::generate_correspondence(curr_id, loop_id, path));
-            std::cout << "YAW: " << yaw << "\n";
         }
     }
     
